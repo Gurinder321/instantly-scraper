@@ -13,7 +13,7 @@ async function extractData() {
   if (data.hasOwnProperty('result')) {
     console.log(`Results found: ${num_results}`);
     csv_data = [...data.result];
-    num_results = num_results - 50;
+    num_results = num_results - 1000;
   } else {
     console.log('Invalid credentials, check your TOKEN!');
     return;
@@ -24,7 +24,7 @@ async function extractData() {
     pageTrail = data.pageTrail;
     csv_data = [...csv_data, ...data.result];
     console.log(`Remaining results: ${num_results}`);
-    num_results = num_results - 50;
+    num_results = num_results - 1000;
   }
 
   if (csv_data.length > 0) {
@@ -39,8 +39,8 @@ async function fetchLeads(pageTrail) {
     'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
     'content-type': 'application/json;charset=UTF-8',
     'sec-ch-ua': '"Opera GX";v="99", "Chromium";v="113", "Not-A.Brand";v="24"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"macOS"',
+    'sec-ch-ua-mobile': '?1',
+    'sec-ch-ua-platform': '"Android"',
     'sec-fetch-dest': 'empty',
     'sec-fetch-mode': 'cors',
     'sec-fetch-site': 'same-origin',
@@ -52,12 +52,9 @@ async function fetchLeads(pageTrail) {
 
   // filters
   const body = JSON.stringify({
-    limit: 50,
+    limit: 1000,
     pageTrail: pageTrail,
-
-    // industry: ['Business Services'],
     country: ['United States'],
-    title: ['CEO'],
     keywordFilter: 'paving',
   });
 
@@ -73,6 +70,7 @@ async function fetchLeads(pageTrail) {
 
 function saveDataToCSV(data) {
   console.log('Savind Data...');
+  console.log(data.length);
   const csvWriter = createCsvWriter({
     path: 'data.csv',
     header: Object.keys(data[0]).map((field) => ({ id: field, title: field })),
